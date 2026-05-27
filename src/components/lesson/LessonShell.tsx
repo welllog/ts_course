@@ -101,13 +101,14 @@ export default function LessonShell({ lesson, moduleId, lessonIndex, totalLesson
 
       <div className="card">
         {lesson.type === 'multiple-choice' && (
-          <MultipleChoice questions={lesson.questions} onComplete={handleComplete} />
+          <MultipleChoice key={lesson.id} questions={lesson.questions} onComplete={handleComplete} />
         )}
         {lesson.type === 'fill-in-blank' && (
-          <FillInBlank questions={lesson.questions} onComplete={handleComplete} />
+          <FillInBlank key={lesson.id} questions={lesson.questions} onComplete={handleComplete} />
         )}
         {lesson.type === 'code-challenge' && (
           <CodeChallenge
+            key={lesson.id}
             instruction={lesson.instruction}
             starterCode={lesson.starterCode}
             tests={lesson.tests}
