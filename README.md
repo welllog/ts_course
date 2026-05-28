@@ -83,24 +83,42 @@ npm run preview
 npm run build
 ```
 
+构建前会自动执行 Monaco 静态资源同步脚本，把 `node_modules/monaco-editor/min/vs` 复制到 `public/monaco/vs`，然后再输出生产构建。
+
 构建产物会输出到 `dist/` 目录。
 
 ## 部署
 
 这是一个标准的静态前端应用，推荐部署到支持静态站点托管的平台，例如 Vercel、Netlify、Cloudflare Pages、GitHub Pages，或者任意支持 `dist/` 目录部署的静态服务器。
 
+当前项目的部署目标是：服务器从仓库拉取代码后，只需执行 `npm install` 和 `npm run build`，不需要手动准备 Monaco 资源，也不依赖 Google Fonts 等外部网络资源。
+
 ### 部署前检查
 
 1. 确认本地构建成功：`npm run build`
 2. 确认 `dist/` 目录生成正常
 3. 确认路由在目标平台上使用了 SPA 回退配置
+4. 确认部署环境会先安装依赖，再执行构建命令
 
 ### 通用部署步骤
 
-1. 执行 `npm run build`
-2. 将 `dist/` 目录上传到静态托管服务
-3. 配置站点根目录指向 `dist/`
-4. 如果使用前端路由，配置所有未命中的路径回退到 `index.html`
+1. 在服务器或 CI 环境执行 `npm install` 或 `npm ci`
+2. 执行 `npm run build`
+3. 将 `dist/` 目录上传到静态托管服务
+4. 配置站点根目录指向 `dist/`
+5. 如果使用前端路由，配置所有未命中的路径回退到 `index.html`
+
+### Monaco 说明
+
+- 仓库中不需要提交 `public/monaco/vs` 目录。
+- `npm run build` 和 `npm run dev` 前会自动执行 `npm run sync:monaco`。
+- 该脚本会从本地安装的 `monaco-editor` 依赖复制运行所需资源，因此部署机必须先完成依赖安装。
+
+### 离线运行说明
+
+- 页面不再依赖在线字体资源。
+- Monaco 编辑器资源从站点自身的 `/monaco/vs` 路径加载。
+- 只要构建完成并正确部署 `dist/`，生产环境无需连接互联网即可正常运行。
 
 ### GitHub Pages
 
@@ -109,6 +127,7 @@ npm run build
 ## 可用脚本
 
 ```bash
+npm run sync:monaco  # 同步 Monaco 静态资源到 public/monaco/vs
 npm run dev      # 启动开发服务器
 npm run build    # 类型检查并构建生产包
 npm run preview  # 本地预览构建结果
@@ -133,4 +152,4 @@ npm run dev
 
 ### Deployment
 
-Build the project with `npm run build`, then deploy the generated `dist/` folder to any static hosting provider such as Vercel, Netlify, Cloudflare Pages, or GitHub Pages.
+Run `npm install` first, then `npm run build`. The build process automatically syncs local Monaco assets before generating `dist/`, so the deployed site can run without external font or CDN dependencies.

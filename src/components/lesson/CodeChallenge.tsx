@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import clsx from 'clsx'
+import loader from '@monaco-editor/loader'
 import type { CodeTest } from '../../data/curriculum'
 import { useTsRunner } from '../../hooks/useTsRunner'
 
@@ -34,12 +35,25 @@ export default function CodeChallenge({ instruction, starterCode, tests, onCompl
     height: string
   }> | null>(null)
 
-  // Lazy-load Monaco
-  useState(() => {
-    import('@monaco-editor/react').then((m) => {
-      setMonacoEditor(() => m.default as typeof MonacoEditor)
+  useEffect(() => {
+    let mounted = true
+
+    loader.config({
+      paths: {
+        vs: '/monaco/vs',
+      },
     })
-  })
+
+    import('@monaco-editor/react').then((m) => {
+      if (mounted) {
+        setMonacoEditor(() => m.default as typeof MonacoEditor)
+      }
+    })
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const isDark = document.documentElement.classList.contains('dark')
 

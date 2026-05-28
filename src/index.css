@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Avenir Next', 'Segoe UI', 'PingFang SC', 'Noto Sans SC', sans-serif;
   }
 
   * {
@@ -19,8 +19,10 @@
     @apply bg-slate-950 text-slate-100;
   }
 
-  code, pre, .font-mono {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  code,
+  pre,
+  .font-mono {
+    font-family: 'SFMono-Regular', 'Cascadia Mono', 'Cascadia Code', 'Fira Code', monospace;
   }
 }
 

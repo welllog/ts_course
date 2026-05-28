@@ -4,6 +4,7 @@ node_modules/
 # build output
 dist/
 coverage/
+public/monaco/vs/
 
 # caches
 .vite/
