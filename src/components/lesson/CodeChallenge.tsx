@@ -196,11 +196,13 @@ export default function CodeChallenge({ instruction, starterCode, tests, onCompl
 
 function markdownToHtml(md: string): string {
   return md
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
     .replace(/^## (.+)$/gm, '<h2 class="text-lg font-bold mt-4 mb-2">$1</h2>')
     .replace(/^### (.+)$/gm, '<h3 class="text-base font-semibold mt-3 mb-1">$1</h3>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`([^`]+)`/g, '<code class="rounded bg-slate-100 dark:bg-slate-700 px-1 py-0.5 text-xs font-mono">$1</code>')
     .replace(/```[\w]*\n([\s\S]*?)```/g, '<pre class="code-block my-3 overflow-x-auto text-xs"><code>$1</code></pre>')
+    .replace(/`([^`]+)`/g, '<code class="rounded bg-slate-100 dark:bg-slate-700 px-1 py-0.5 text-xs font-mono">$1</code>')
     .replace(/\n\n/g, '</p><p class="mt-2">')
     .replace(/^(?!<)(.+)$/gm, '<p>$1</p>')
     .replace(/\| (.+) \|/g, (_, row) => {
